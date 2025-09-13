@@ -1,18 +1,24 @@
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
 
 def train_model(df):
-    # features = EMA + RSI, target = Close price
-    X = df[['EMA_20', 'RSI']].dropna()
-    y = df['Close'].loc[X.index]
+    df['Target'] = (df['Close'].shift(-1) > df['Close']).astype(int)
+    df = df.dropna()
+
+    features = ['Close', 'EMA_20', 'RSI', 'Volume']
+    X = df[features]
+    y = df['Target']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
 
-    model = LinearRegression()
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
 
-    preds = model.predict(X_test)
-    mse = mean_squared_error(y_test, preds)
+    # přidat predikce do df
+    df.loc[X_test.index, 'Prediction'] = y_pred
 
-    return model, X_test, y_test, preds, mse
+    # ← tady vracíme všechny tři věci
+    return df, model, accuracy
