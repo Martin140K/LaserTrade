@@ -99,6 +99,11 @@ else:
     prediction_text = "TRH PŮJDE DOLŮ ↓"
     color = "red"
 
+current_rsi = last_row['RSI'].values[0]
+rsi_label = f"RSI: {current_rsi:.2f}"
+
+plt.plot([], [], ' ', label=rsi_label)  # prázdná série jen pro legendu
+
 # Text pod graf (souřadnice 0.5 = střed, 0.0 = úplně dole)
 plt.figtext(0.5, -0.05, prediction_text, fontsize=14, color=color, ha='center')
 plt.ylim(bottom=0)
