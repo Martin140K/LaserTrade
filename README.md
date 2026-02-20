@@ -1,5 +1,5 @@
 # LaserTrade
-Machine Learning market price prediction.
+LaserTrade - Machine Learning market price prediction.
 
 The project was created for ML training on financial data. The goal is not perfect prediction, but understanding the pipeline.
 
